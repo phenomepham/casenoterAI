@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supportive Service Justification Case Note Tool</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #d1d5db;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --danger: #b91c1c;
+      --warn: #b45309;
+      --ok: #047857;
+      --soft-blue: #eff6ff;
+      --soft-red: #fef2f2;
+      --soft-yellow: #fffbeb;
+      --soft-green: #ecfdf5;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: white;
+      padding: 28px 18px;
+    }
+
+    header .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.65rem;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #dbeafe;
+      max-width: 900px;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 20px auto 60px;
+      padding: 0 16px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid #e5e7eb;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      margin: 0 0 14px;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin: 18px 0 10px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 12px 0 6px;
+      font-size: 0.92rem;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.83rem;
+      margin-top: 4px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 11px;
+      font: inherit;
+      background: white;
+      color: var(--ink);
+    }
+
+    textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 650px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    .checks {
+      display: grid;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .checkline {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 9px;
+      align-items: start;
+      padding: 9px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+
+    .checkline input {
+      width: auto;
+      margin-top: 3px;
+    }
+
+    .checkline span {
+      font-size: 0.92rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--primary);
+      color: white;
+    }
+
+    button:hover { background: var(--primary-dark); }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button.secondary:hover { background: #d1d5db; }
+
+    button.danger {
+      background: #dc2626;
+    }
+
+    button.danger:hover { background: #b91c1c; }
+
+    button.small {
+      padding: 7px 9px;
+      font-size: 0.85rem;
+    }
+
+    .scorebox {
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 14px;
+    }
+
+    .score {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 2px 0;
+    }
+
+    .risk-low { background: var(--soft-green); color: var(--ok); }
+    .risk-med { background: var(--soft-yellow); color: var(--warn); }
+    .risk-high { background: var(--soft-red); color: var(--danger); }
+
+    .output {
+      white-space: pre-wrap;
+      border: 1px solid var(--line);
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 10px;
+      min-height: 110px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .library-item {
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .library-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .library-title {
+      font-weight: 800;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      background: var(--soft-blue);
+      color: #1e40af;
+      padding: 3px 8px;
+      font-size: 0.78rem;
+      margin: 3px 3px 3px 0;
+    }
+
+    .missing {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .met {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .notice {
+      background: #f9fafb;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 12px;
+      color: #374151;
+      font-size: 0.92rem;
+    }
+
+    details {
+      margin-top: 12px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: #1d4ed8;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 8px;
+    }
+
+    .inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-weight: 700;
+    }
+
+    .inline input {
+      width: auto;
+    }
+
+    .ai-panel {
+      margin-top: 14px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .ai-status {
+      font-size: 0.86rem;
+      color: #1e40af;
+      margin-top: 8px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Supportive Service Justification Case Note Tool</h1>
+      <p class="subtitle">Build a generic checklist, plain-language case note, and AI-ready case note prompt for WIOA supportive service requests. The tool avoids saving participant names and stores only your editable service library in this browser.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <section class="card">
+        <h2>Request Details</h2>
+
+        <div class="row">
+          <div>
+            <label for="programType">Program</label>
+            <select id="programType">
+              <option>Adult</option>
+              <option>Dislocated Worker</option>
+              <option>Youth</option>
+              <option>Multiple / Not program-specific</option>
+            </select>
+          </div>
+          <div>
+            <label for="serviceType">Supportive Service Type</label>
+            <select id="serviceType"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="requestDate">Request Date</label>
+            <input id="requestDate" type="date" />
+          </div>
+          <div>
+            <label for="staffName">Staff Name / Initials</label>
+            <input id="staffName" placeholder="Example: BP or Career Navigator" />
+          </div>
+        </div>
+
+        <label for="purpose">Purpose of the Supportive Service</label>
+        <textarea id="purpose" placeholder="What is the support meant to help the participant do? Example: attend training, maintain employment, resolve a barrier to participation."></textarea>
+
+        <label for="need">Need / Barrier</label>
+        <textarea id="need" placeholder="Describe the specific need. Do not include unnecessary personal details."></textarea>
+
+        <label for="itemDetails">Details of the Item or Request</label>
+        <textarea id="itemDetails" placeholder="Describe what is being requested, amount if applicable, vendor/payee if applicable, timeframe, and how it connects to the activity or goal."></textarea>
+
+        <label for="futurePlan">How the Participant Will Manage Without This Support in the Future</label>
+        <textarea id="futurePlan" placeholder="Example: participant expects wages to begin, has budgeted future payments, will use regular transportation plan, etc."></textarea>
+
+        <label for="docsAttached">Documents Attached / Reviewed</label>
+        <textarea id="docsAttached" placeholder="List documentation attached. Example: lease, bill, invoice, estimate, schedule, training documentation, receipt, W-9, etc."></textarea>
+
+        <label for="extraNotes">Other Relevant Details</label>
+        <textarea id="extraNotes" placeholder="Optional. Add any clarifying details, approval status, special circumstances, or follow-up needed."></textarea>
+
+        <h3>Required WIOA Checks</h3>
+        <div class="checks">
+          <label class="checkline">
+            <input type="checkbox" id="oasCheck" />
+            <span>The need is documented on the OAS, or if not specifically on the OAS, it is tied to an objective on the IEP/ISS.</span>
+          </label>
+          <label class="checkline">
+            <input type="checkbox" id="planCheck" />
+            <span>The supportive service is connected to the participant’s IEP/ISS goal or objective.</span>
+          </label>
+          <label class="checkline">
+            <input type="checkbox" id="activityCheck" />
+            <span>An appropriate activity is open and the supportive service is tied to that activity.</span>
+          </label>
+          <label class="checkline">
+            <input type="checkbox" id="docCheck" />
+            <span>Required documentation is attached or described.</span>
+          </label>
+        </div>
+
+        <h3>Service-Specific Checklist</h3>
+        <div id="serviceChecklist" class="checks"></div>
+
+        <div class="actions">
+          <button onclick="generateAll()">Generate Case Note + Checklist</button>
+          <button class="secondary" onclick="clearRequest()">Clear Request</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Output</h2>
+
+        <div id="scoreBox" class="scorebox risk-med">
+          <div>Estimated denial risk</div>
+          <div id="riskScore" class="score">--%</div>
+          <div id="riskText">Complete the form and generate output.</div>
+        </div>
+
+        <h3>Case Note</h3>
+        <div id="caseNote" class="output"></div>
+        <div class="actions">
+          <button class="small" onclick="copyText('caseNote')">Copy Case Note</button>
+          <button class="small secondary" onclick="generateAIDraft()">Generate AI-Style Case Note</button>
+          <button class="small secondary" onclick="copyAIPrompt()">Copy AI Prompt</button>
+        </div>
+
+        <div class="ai-panel">
+          <strong>AI option</strong>
+          <div class="hint">Use “Generate AI-Style Case Note” for a cleaner local draft using only entered fields. Use “Copy AI Prompt” if you want to paste the structured prompt into ChatGPT or another approved AI system.</div>
+          <div id="aiStatus" class="ai-status"></div>
+        </div>
+
+        <h3>Checklist Summary</h3>
+        <div id="checklistSummary" class="output"></div>
+        <div class="actions">
+          <button class="small" onclick="copyText('checklistSummary')">Copy Checklist</button>
+          <button class="small secondary" onclick="copyBoth()">Copy Both</button>
+        </div>
+
+        <p class="footer-note">The score is a screening estimate based only on entered checklist items. It is not an approval decision.</p>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>Editable Supportive Service Library</h2>
+      <p class="notice">Use this section to add service types or change checklist items. Library changes are saved in this browser only. Participant details are not saved.</p>
+
+      <div class="row">
+        <div>
+          <label for="newTypeName">Supportive Service Type Name</label>
+          <input id="newTypeName" placeholder="Example: Certification Exam Fee" />
+        </div>
+        <div>
+          <label for="newTypeItems">Checklist Items</label>
+          <textarea id="newTypeItems" placeholder="Enter one item per line."></textarea>
+        </div>
+      </div>
+
+      <label class="inline">
+        <input type="checkbox" id="newTypeRequiredDefault" checked />
+        Mark new checklist items as required by default
+      </label>
+
+      <div class="actions">
+        <button onclick="addOrUpdateServiceType()">Add / Update Service Type</button>
+        <button class="secondary" onclick="exportLibrary()">Export Library JSON</button>
+        <button class="secondary" onclick="document.getElementById('importFile').click()">Import Library JSON</button>
+        <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importLibrary(event)" />
+        <button class="danger" onclick="resetLibrary()">Reset Default Library</button>
+      </div>
+
+      <details open>
+        <summary>Current Library</summary>
+        <div id="libraryView"></div>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "supportiveServiceLibrary.v1";
+
+    const defaultLibrary = {
+      "Gas Card": [
+        { text: "Transportation need is tied to employment, training, WEX, job search, or another open activity.", required: true },
+        { text: "Participant has no reasonable alternative transportation or has a documented short-term transportation gap.", required: true },
+        { text: "Amount or card value is listed if required by local process.", required: false },
+        { text: "Service timeframe or expected use is clear.", required: true }
+      ],
+      "Uber Card": [
+        { text: "Reason Uber/rideshare is needed instead of bus, gas card, or other lower-cost option is documented.", required: true },
+        { text: "Trip purpose is connected to an open activity, employment, training, appointment, or WIOA participation need.", required: true },
+        { text: "Date range, destination type, or estimated ride need is clear.", required: true },
+        { text: "Participant’s lack of driver’s license, vehicle access, route access, or safety issue is documented if applicable.", required: false }
+      ],
+      "Youth Needs Related Payment": [
+        { text: "Youth program eligibility and participation status are confirmed.", required: true },
+        { text: "Need is tied to participation in an allowable activity or service strategy.", required: true },
+        { text: "Payment amount, period, and reason are documented if required by local process.", required: true },
+        { text: "ISS objective or service strategy supports the need.", required: true }
+      ],
+      "Adult Needs Related Payment": [
+        { text: "Adult program participation status is confirmed.", required: true },
+        { text: "Need is tied to participation in an allowable training or career service activity.", required: true },
+        { text: "Payment amount, period, and reason are documented if required by local process.", required: true },
+        { text: "IEP objective supports the need.", required: true }
+      ],
+      "Rent": [
+        { text: "Housing need is connected to ability to participate in WIOA activity, training, or employment.", required: true },
+        { text: "Lease, notice, landlord statement, or other rent documentation is attached.", required: true },
+        { text: "Landlord/payee information is documented if payment is made directly to landlord.", required: true },
+        { text: "Amount due and covered amount are clear.", required: true },
+        { text: "W-9 or vendor documentation is attached if required.", required: false }
+      ],
+      "Mortgage": [
+        { text: "Housing need is connected to ability to participate in WIOA activity, training, or employment.", required: true },
+        { text: "Mortgage statement or lender documentation is attached.", required: true },
+        { text: "Amount due and covered amount are clear.", required: true },
+        { text: "Payment method/payee information is documented if required.", required: false }
+      ],
+      "Textbooks": [
+        { text: "Training program and course need are connected to the IEP/ISS goal.", required: true },
+        { text: "Book list, syllabus, bookstore quote, invoice, or receipt is attached.", required: true },
+        { text: "Cost and covered amount are clear.", required: true },
+        { text: "Item is required or reasonably necessary for training participation.", required: true }
+      ],
+      "Utility Bill": [
+        { text: "Utility need is connected to stability needed for participation, training, or employment.", required: true },
+        { text: "Current utility bill, shutoff notice, or account documentation is attached.", required: true },
+        { text: "Account holder, amount due, and covered amount are clear.", required: true },
+        { text: "Payee/vendor information is documented if required.", required: false }
+      ],
+      "Tools for Work": [
+        { text: "Employment or job offer need is documented.", required: true },
+        { text: "Tools are required or reasonably necessary for the job.", required: true },
+        { text: "Employer statement, job description, quote, invoice, or receipt is attached.", required: true },
+        { text: "Cost and covered amount are clear.", required: true }
+      ],
+      "Tools for Training": [
+        { text: "Training program need is connected to the IEP/ISS goal.", required: true },
+        { text: "Tools are required or reasonably necessary for training participation.", required: true },
+        { text: "Training provider list, syllabus, quote, invoice, or receipt is attached.", required: true },
+        { text: "Cost and covered amount are clear.", required: true }
+      ],
+      "Reimbursement": [
+        { text: "Reason reimbursement is allowable and tied to the WIOA activity is documented.", required: true },
+        { text: "Receipt or proof of payment is attached.", required: true },
+        { text: "Item/service date is within the allowable timeframe if required by local process.", required: true },
+        { text: "Amount requested and amount to reimburse are clear.", required: true }
+      ],
+      "Vehicle Repair": [
+        { text: "Transportation need is tied to employment, training, WEX, job search, or another open activity.", required: true },
+        { text: "Vehicle repair is necessary for participation or employment stability.", required: true },
+        { text: "Estimate, invoice, or receipt is attached.", required: true },
+        { text: "Vehicle ownership/use or access is reasonably documented if required.", required: false },
+        { text: "Cost and covered amount are clear.", required: true }
+      ],
+      "Misc.": [
+        { text: "Need is clearly tied to a WIOA goal, objective, or open activity.", required: true },
+        { text: "Request is reasonable, necessary, and not already covered by another source.", required: true },
+        { text: "Documentation supports the item, amount, and purpose.", required: true },
+        { text: "Follow-up or next step is clear if additional documentation is needed.", required: false }
+      ]
+    };
+
+    let library = loadLibrary();
+
+    function loadLibrary() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return structuredClone(defaultLibrary);
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed && typeof parsed === "object" ? parsed : structuredClone(defaultLibrary);
+      } catch {
+        return structuredClone(defaultLibrary);
+      }
+    }
+
+    function saveLibrary() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(library));
+    }
+
+    function init() {
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById("requestDate").value = today;
+      refreshServiceDropdown();
+      renderChecklist();
+      renderLibrary();
+      document.getElementById("serviceType").addEventListener("change", renderChecklist);
+    }
+
+    function refreshServiceDropdown() {
+      const select = document.getElementById("serviceType");
+      const current = select.value;
+      select.innerHTML = "";
+      Object.keys(library).sort().forEach(type => {
+        const option = document.createElement("option");
+        option.value = type;
+        option.textContent = type;
+        select.appendChild(option);
+      });
+      if (current && library[current]) select.value = current;
+    }
+
+    function renderChecklist() {
+      const type = document.getElementById("serviceType").value;
+      const box = document.getElementById("serviceChecklist");
+      box.innerHTML = "";
+      (library[type] || []).forEach((item, idx) => {
+        const label = document.createElement("label");
+        label.className = "checkline";
+        label.innerHTML = `
+          <input type="checkbox" class="serviceItem" data-index="${idx}" />
+          <span>${escapeHtml(item.text)} ${item.required ? '<strong class="missing">(required)</strong>' : '<span class="hint">(optional)</span>'}</span>
+        `;
+        box.appendChild(label);
+      });
+    }
+
+    function renderLibrary() {
+      const view = document.getElementById("libraryView");
+      view.innerHTML = "";
+
+      Object.keys(library).sort().forEach(type => {
+        const div = document.createElement("div");
+        div.className = "library-item";
+
+        const requiredCount = library[type].filter(i => i.required).length;
+        div.innerHTML = `
+          <div class="library-top">
+            <div>
+              <div class="library-title">${escapeHtml(type)}</div>
+              <span class="tag">${library[type].length} checklist items</span>
+              <span class="tag">${requiredCount} required</span>
+            </div>
+            <div>
+              <button class="small secondary" onclick="editServiceType('${escapeJs(type)}')">Edit</button>
+              <button class="small danger" onclick="deleteServiceType('${escapeJs(type)}')">Delete</button>
+            </div>
+          </div>
+          <ol>${library[type].map(i => `<li>${escapeHtml(i.text)} ${i.required ? '<strong>(required)</strong>' : '<span class="hint">(optional)</span>'}</li>`).join("")}</ol>
+        `;
+        view.appendChild(div);
+      });
+    }
+
+    function addOrUpdateServiceType() {
+      const name = document.getElementById("newTypeName").value.trim();
+      const rawItems = document.getElementById("newTypeItems").value.trim();
+      const requiredDefault = document.getElementById("newTypeRequiredDefault").checked;
+
+      if (!name || !rawItems) {
+        alert("Enter a service type name and at least one checklist item.");
+        return;
+      }
+
+      const items = rawItems.split(/\n+/).map(line => line.trim()).filter(Boolean).map(text => ({
+        text,
+        required: requiredDefault
+      }));
+
+      library[name] = items;
+      saveLibrary();
+      refreshServiceDropdown();
+      document.getElementById("serviceType").value = name;
+      renderChecklist();
+      renderLibrary();
+
+      document.getElementById("newTypeName").value = "";
+      document.getElementById("newTypeItems").value = "";
+    }
+
+    function editServiceType(type) {
+      document.getElementById("newTypeName").value = type;
+      document.getElementById("newTypeItems").value = (library[type] || []).map(i => i.text).join("\n");
+      document.getElementById("newTypeRequiredDefault").checked = true;
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+
+    function deleteServiceType(type) {
+      if (!confirm(`Delete ${type} from the library?`)) return;
+      delete library[type];
+      saveLibrary();
+      refreshServiceDropdown();
+      renderChecklist();
+      renderLibrary();
+    }
+
+    function resetLibrary() {
+      if (!confirm("Reset the library to the default list? This will remove custom service types saved in this browser.")) return;
+      library = structuredClone(defaultLibrary);
+      saveLibrary();
+      refreshServiceDropdown();
+      renderChecklist();
+      renderLibrary();
+    }
+
+    function exportLibrary() {
+      const blob = new Blob([JSON.stringify(library, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "supportive-service-library.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importLibrary(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!parsed || typeof parsed !== "object") throw new Error("Invalid library");
+          library = parsed;
+          saveLibrary();
+          refreshServiceDropdown();
+          renderChecklist();
+          renderLibrary();
+          alert("Library imported.");
+        } catch {
+          alert("Could not import the library. Check that it is valid JSON.");
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = "";
+    }
+
+    function generateAll() {
+      const data = getFormData();
+      const result = calculateRisk(data);
+      renderRisk(result);
+      renderCaseNote(data);
+      renderChecklistSummary(data, result);
+    }
+
+    function getFormData() {
+      const type = document.getElementById("serviceType").value;
+      const serviceChecks = Array.from(document.querySelectorAll(".serviceItem")).map(input => {
+        const item = library[type][Number(input.dataset.index)];
+        return {
+          text: item.text,
+          required: !!item.required,
+          checked: input.checked
+        };
+      });
+
+      return {
+        programType: val("programType"),
+        serviceType: type,
+        requestDate: val("requestDate"),
+        staffName: val("staffName"),
+        purpose: val("purpose"),
+        need: val("need"),
+        itemDetails: val("itemDetails"),
+        futurePlan: val("futurePlan"),
+        docsAttached: val("docsAttached"),
+        extraNotes: val("extraNotes"),
+        requiredChecks: [
+          { text: "Need is on OAS, or tied to IEP/ISS objective if not specifically on OAS", checked: document.getElementById("oasCheck").checked, required: true },
+          { text: "Supportive service is connected to IEP/ISS goal or objective", checked: document.getElementById("planCheck").checked, required: true },
+          { text: "Appropriate activity is open", checked: document.getElementById("activityCheck").checked, required: true },
+          { text: "Required documentation is attached or described", checked: document.getElementById("docCheck").checked, required: true }
+        ],
+        serviceChecks
+      };
+    }
+
+    function val(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function calculateRisk(data) {
+      let risk = 0;
+      const missing = [];
+
+      data.requiredChecks.forEach(c => {
+        if (!c.checked) {
+          risk += 18;
+          missing.push(c.text);
+        }
+      });
+
+      data.serviceChecks.forEach(c => {
+        if (c.required && !c.checked) {
+          risk += 10;
+          missing.push(c.text);
+        }
+      });
+
+      const criticalFields = [
+        ["purpose", "Purpose is blank"],
+        ["need", "Need/barrier is blank"],
+        ["itemDetails", "Details of the request are blank"],
+        ["futurePlan", "Future management plan is blank"],
+        ["docsAttached", "Documents attached/reviewed are blank"]
+      ];
+
+      criticalFields.forEach(([key, label]) => {
+        if (!data[key]) {
+          risk += 6;
+          missing.push(label);
+        }
+      });
+
+      risk = Math.min(100, risk);
+      return { risk, missing };
+    }
+
+    function renderRisk(result) {
+      const box = document.getElementById("scoreBox");
+      const score = document.getElementById("riskScore");
+      const text = document.getElementById("riskText");
+
+      box.classList.remove("risk-low", "risk-med", "risk-high");
+      if (result.risk <= 25) {
+        box.classList.add("risk-low");
+        text.textContent = "Low estimated denial risk based on completed fields and checklist items.";
+      } else if (result.risk <= 60) {
+        box.classList.add("risk-med");
+        text.textContent = "Moderate estimated denial risk. Review missing or weak items before submission.";
+      } else {
+        box.classList.add("risk-high");
+        text.textContent = "High estimated denial risk. Required items appear to be missing.";
+      }
+      score.textContent = `${result.risk}%`;
+    }
+
+    function renderCaseNote(data) {
+      const missingRequired = data.requiredChecks.concat(data.serviceChecks)
+        .filter(c => c.required && !c.checked)
+        .map(c => c.text);
+
+      const introParts = [];
+      introParts.push(`Supportive service request reviewed for ${data.programType} program: ${data.serviceType}.`);
+      if (data.requestDate) introParts.push(`Request date: ${data.requestDate}.`);
+      if (data.purpose) introParts.push(`Purpose: ${data.purpose}`);
+      if (data.need) introParts.push(`Need: ${data.need}`);
+
+      const detailParts = [];
+      if (data.itemDetails) detailParts.push(`Request details: ${data.itemDetails}`);
+      if (data.docsAttached) detailParts.push(`Documents reviewed/attached: ${data.docsAttached}`);
+      if (data.futurePlan) detailParts.push(`Future plan: ${data.futurePlan}`);
+
+      const complianceParts = [];
+      const metChecks = data.requiredChecks.filter(c => c.checked).map(c => c.text);
+      if (metChecks.length) complianceParts.push(`Verified: ${metChecks.join("; ")}.`);
+      if (missingRequired.length) {
+        complianceParts.push(`Pending/missing items to resolve before approval or payment: ${missingRequired.join("; ")}.`);
+      }
+      if (data.extraNotes) complianceParts.push(`Additional note: ${data.extraNotes}`);
+      if (data.staffName) complianceParts.push(`Staff: ${data.staffName}.`);
+
+      let note = "";
+      note += introParts.join(" ") + "\n\n";
+      note += detailParts.length ? detailParts.join(" ") + "\n\n" : "";
+      note += complianceParts.join(" ");
+
+      document.getElementById("caseNote").textContent = note.trim();
+    }
+
+    function renderChecklistSummary(data, result) {
+      const allChecks = [
+        ...data.requiredChecks.map(c => ({ ...c, group: "WIOA standard checks" })),
+        ...data.serviceChecks.map(c => ({ ...c, group: `${data.serviceType} checklist` }))
+      ];
+
+      let output = `Supportive Service: ${data.serviceType}\nProgram: ${data.programType}\nEstimated Denial Risk: ${result.risk}%\n\n`;
+
+      output += "Completed Items:\n";
+      const completed = allChecks.filter(c => c.checked);
+      output += completed.length ? completed.map(c => `✓ ${c.text}`).join("\n") : "None marked complete.";
+
+      output += "\n\nMissing / Not Checked:\n";
+      const missing = allChecks.filter(c => !c.checked);
+      output += missing.length ? missing.map(c => `${c.required ? "Required" : "Optional"} - ${c.text}`).join("\n") : "No checklist items missing.";
+
+      if (result.missing.length) {
+        output += "\n\nRisk Factors:\n" + result.missing.map(m => `- ${m}`).join("\n");
+      }
+
+      document.getElementById("checklistSummary").textContent = output;
+    }
+
+
+    function generateAIDraft() {
+      const data = getFormData();
+      const result = calculateRisk(data);
+      renderRisk(result);
+      renderChecklistSummary(data, result);
+
+      const requiredMissing = data.requiredChecks.concat(data.serviceChecks)
+        .filter(c => c.required && !c.checked)
+        .map(c => c.text);
+
+      const facts = {
+        program: data.programType || "program not specified",
+        service: data.serviceType || "supportive service not specified",
+        date: data.requestDate || "",
+        purpose: data.purpose,
+        need: data.need,
+        details: data.itemDetails,
+        future: data.futurePlan,
+        docs: data.docsAttached,
+        extra: data.extraNotes,
+        staff: data.staffName
+      };
+
+      const missingCore = [];
+      if (!facts.purpose) missingCore.push("purpose");
+      if (!facts.need) missingCore.push("need/barrier");
+      if (!facts.details) missingCore.push("request details");
+      if (!facts.future) missingCore.push("future plan");
+      if (!facts.docs) missingCore.push("documents reviewed/attached");
+
+      let p1 = `Supportive service request reviewed for ${facts.program}: ${facts.service}.`;
+      if (facts.date) p1 += ` Request date: ${facts.date}.`;
+      if (facts.purpose) p1 += ` The purpose of the request is ${lowerFirst(facts.purpose)}.`;
+      if (facts.need) p1 += ` The need for support is based on the following barrier: ${facts.need}.`;
+      if (facts.details) p1 += ` The requested item/service is described as follows: ${facts.details}.`;
+
+      let p2 = "";
+      if (facts.docs) p2 += `Documentation reviewed or attached includes: ${facts.docs}.`;
+      if (facts.future) p2 += ` The participant's plan to manage the need going forward is: ${facts.future}.`;
+      if (facts.extra) p2 += ` Additional details: ${facts.extra}.`;
+
+      const verified = data.requiredChecks.filter(c => c.checked).map(c => c.text);
+      let p3 = "";
+      if (verified.length) {
+        p3 += ` WIOA review items marked complete: ${verified.join("; ")}.`;
+      }
+      if (requiredMissing.length) {
+        p3 += ` Required items still needing review or correction before approval/payment: ${requiredMissing.join("; ")}.`;
+      } else {
+        p3 += ` No required checklist items were marked missing based on the information entered.`;
+      }
+      if (facts.staff) p3 += ` Staff: ${facts.staff}.`;
+
+      let note = [p1, p2, p3].filter(Boolean).join("\n\n");
+
+      if (missingCore.length) {
+        note += `\n\nClarification needed before finalizing: ${missingCore.join(", ")}.`;
+      }
+
+      document.getElementById("caseNote").textContent = note.trim();
+      document.getElementById("aiStatus").textContent = "AI-style case note generated from entered fields only. Review for accuracy before use.";
+    }
+
+    function buildAIPrompt() {
+      const data = getFormData();
+      const result = calculateRisk(data);
+      const checked = data.requiredChecks.concat(data.serviceChecks).filter(c => c.checked).map(c => c.text);
+      const missing = data.requiredChecks.concat(data.serviceChecks).filter(c => !c.checked).map(c => `${c.required ? "Required" : "Optional"} - ${c.text}`);
+
+      return `Create a plain-language WIOA supportive service justification case note using only the information below. Do not make up details. If something is missing, include a brief clarification-needed sentence. Keep the final case note to 2-3 paragraphs. Use natural shorthand when appropriate. Include purpose, need, request details, future plan, documents reviewed/attached, and WIOA standard checks.
+
+Program: ${data.programType}
+Supportive service type: ${data.serviceType}
+Request date: ${data.requestDate}
+Staff name/initials: ${data.staffName}
+
+Purpose:
+${data.purpose || "[blank]"}
+
+Need/barrier:
+${data.need || "[blank]"}
+
+Request details:
+${data.itemDetails || "[blank]"}
+
+How participant will manage without support in the future:
+${data.futurePlan || "[blank]"}
+
+Documents attached/reviewed:
+${data.docsAttached || "[blank]"}
+
+Other relevant details:
+${data.extraNotes || "[blank]"}
+
+Checklist items marked complete:
+${checked.length ? checked.map(x => "- " + x).join("\n") : "[none]"}
+
+Checklist items not checked:
+${missing.length ? missing.map(x => "- " + x).join("\n") : "[none]"}
+
+Estimated denial risk score from tool: ${result.risk}%`;
+    }
+
+    function copyAIPrompt() {
+      const prompt = buildAIPrompt();
+      navigator.clipboard.writeText(prompt).then(() => {
+        document.getElementById("aiStatus").textContent = "AI prompt copied. Paste it into ChatGPT or another approved AI system.";
+        alert("AI prompt copied.");
+      });
+    }
+
+    function lowerFirst(text) {
+      if (!text) return text;
+      return text.charAt(0).toLowerCase() + text.slice(1);
+    }
+
+    function copyText(id) {
+      const text = document.getElementById(id).textContent;
+      if (!text.trim()) {
+        alert("Nothing to copy yet.");
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => alert("Copied."));
+    }
+
+    function copyBoth() {
+      const caseNote = document.getElementById("caseNote").textContent.trim();
+      const checklist = document.getElementById("checklistSummary").textContent.trim();
+      const text = `CASE NOTE\n${caseNote}\n\nCHECKLIST SUMMARY\n${checklist}`.trim();
+      if (!caseNote && !checklist) {
+        alert("Nothing to copy yet.");
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => alert("Copied."));
+    }
+
+    function clearRequest() {
+      ["purpose", "need", "itemDetails", "futurePlan", "docsAttached", "extraNotes", "staffName"].forEach(id => {
+        document.getElementById(id).value = "";
+      });
+      ["oasCheck", "planCheck", "activityCheck", "docCheck"].forEach(id => {
+        document.getElementById(id).checked = false;
+      });
+      document.querySelectorAll(".serviceItem").forEach(i => i.checked = false);
+      document.getElementById("caseNote").textContent = "";
+      document.getElementById("checklistSummary").textContent = "";
+      document.getElementById("riskScore").textContent = "--%";
+      document.getElementById("riskText").textContent = "Complete the form and generate output.";
+      document.getElementById("scoreBox").classList.remove("risk-low", "risk-high");
+      document.getElementById("scoreBox").classList.add("risk-med");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeJs(str) {
+      return String(str).replaceAll("\\", "\\\\").replaceAll("'", "\\'");
+    }
+
+    init();
+  </script>
+</body>
+</html>
